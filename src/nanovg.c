@@ -27,6 +27,10 @@
 #define STB_IMAGE_IMPLEMENTATION
 #include "stb_image.h"
 
+// to make sure that nvgCreatexxx gets build into the shared lib
+#include <OpenGL/gl3.h>
+#include "nanovg_gl.h"
+
 #ifdef _MSC_VER
 #pragma warning(disable: 4100)  // unreferenced formal parameter
 #pragma warning(disable: 4127)  // conditional expression is constant

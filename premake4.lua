@@ -8,11 +8,11 @@ solution "nanovg"
 	
    	project "nanovg"
 		language "C"
-		kind "StaticLib"
+		kind "SharedLib"
 		includedirs { "src" }
 		files { "src/*.c" }
 		targetdir("build")
-		defines { "_CRT_SECURE_NO_WARNINGS" } --,"FONS_USE_FREETYPE" } Uncomment to compile with FreeType support
+    defines { "_CRT_SECURE_NO_WARNINGS",  "NANOVG_GL3_IMPLEMENTATION" }
 		
 		configuration "Debug"
 			defines { "DEBUG" }
@@ -21,6 +21,9 @@ solution "nanovg"
 		configuration "Release"
 			defines { "NDEBUG" }
 			flags { "Optimize", "ExtraWarnings"}
+
+		configuration { "macosx" }
+			linkoptions { "-framework OpenGL" }
 
 	project "example_gl2"
 
