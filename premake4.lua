@@ -12,6 +12,7 @@ solution "nanovg"
 		includedirs { "src" }
 		files { "src/*.c" }
 		targetdir("build")
+    links { "freetype" }
     defines { "_CRT_SECURE_NO_WARNINGS", "FONS_USE_FREETYPE", "NANOVG_GL3_IMPLEMENTATION" }
 		
 		configuration "Debug"
