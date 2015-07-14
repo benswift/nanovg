@@ -2756,4 +2756,64 @@ void nvgTextMetrics(NVGcontext* ctx, float* ascender, float* descender, float* l
 	if (lineh != NULL)
 		*lineh *= invscale;
 }
+
+// helper functions which pass structs by reference, rather than value
+// useful in FFI applications
+
+NVGpaint* _nvgBoxGradient(NVGcontext* ctx,
+                          float x, float y, float w, float h, float r, float f,
+                          NVGcolor* icol, NVGcolor* ocol)
+{
+  NVGpaint* paint = (NVGpaint*)malloc(sizeof(NVGpaint));
+  *paint = nvgBoxGradient(ctx, x, y, w, h, r, f, *icol, *ocol);
+  return paint;
+}
+
+NVGpaint* _nvgRadialGradient(NVGcontext* ctx,
+                             float cx, float cy, float inr, float outr,
+                             NVGcolor* icol, NVGcolor* ocol)
+{
+  NVGpaint* paint = (NVGpaint*)malloc(sizeof(NVGpaint));
+  *paint = nvgRadialGradient(ctx, cx, cy, inr, outr, *icol, *ocol);
+  return paint;
+}
+
+NVGpaint* _nvgLinearGradient(NVGcontext* ctx,
+                            float sx, float sy, float ex, float ey,
+                            NVGcolor* icol, NVGcolor* ocol)
+{
+  NVGpaint* paint = (NVGpaint*)malloc(sizeof(NVGpaint));
+  *paint = nvgLinearGradient(ctx, sx, sy, ex, ey, *icol, *ocol);
+  return paint;
+}
+
+NVGpaint* _nvgImagePattern(NVGcontext* ctx,
+                          float cx, float cy, float w, float h, float angle,
+                          int image, float alpha)
+{
+  NVGpaint* paint = (NVGpaint*)malloc(sizeof(NVGpaint));
+  *paint = nvgImagePattern(ctx, cx, cy, w, h, angle, image, alpha);
+  return paint;
+}
+
+void _nvgStrokeColor(NVGcontext* ctx, NVGcolor* color)
+{
+  nvgStrokeColor(ctx, *color);
+}
+
+void _nvgStrokePaint(NVGcontext* ctx, NVGpaint* paint)
+{
+  nvgStrokePaint(ctx, *paint);
+}
+
+void _nvgFillColor(NVGcontext* ctx, NVGcolor* color)
+{
+  nvgFillColor(ctx, *color);
+}
+
+void _nvgFillPaint(NVGcontext* ctx, NVGpaint* paint)
+{
+  nvgFillPaint(ctx, *paint);
+}
+
 // vim: ft=c nu noet ts=4

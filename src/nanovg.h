@@ -607,6 +607,18 @@ NVGparams* nvgInternalParams(NVGcontext* ctx);
 // Debug function to dump cached path data.
 void nvgDebugDumpPathCache(NVGcontext* ctx);
 
+// helper functions which pass structs by reference, rather than value
+// useful in FFI applications
+
+NVGpaint* _nvgRadialGradient(NVGcontext* ctx, float cx, float cy, float inr, float outr, NVGcolor* icol, NVGcolor* ocol);
+NVGpaint* _nvgLinearGradient(NVGcontext* ctx, float sx, float sy, float ex, float ey, NVGcolor* icol, NVGcolor* ocol);
+NVGpaint* _nvgImagePattern(NVGcontext* ctx, float cx, float cy, float w, float h, float angle, int image, float alpha);
+void _nvgStrokeColor(NVGcontext* ctx, NVGcolor* color);
+void _nvgStrokePaint(NVGcontext* ctx, NVGpaint* paint);
+void _nvgFillColor(NVGcontext* ctx, NVGcolor* color);
+void _nvgFillPaint(NVGcontext* ctx, NVGpaint* paint);
+NVGpaint* _nvgBoxGradient(NVGcontext* ctx, float x, float y, float w, float h, float r, float f, NVGcolor* icol, NVGcolor* ocol);
+
 #ifdef _MSC_VER
 #pragma warning(pop)
 #endif
