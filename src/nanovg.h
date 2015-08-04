@@ -23,16 +23,6 @@
 extern "C" {
 #endif
 
-// sublty rename all the "pass struct by val" functions, so that we can use these names for the "pass by reference" versions implemented at the bottom of nanovg.c
-#define nvgLinearGradient _nvgLinearGradient
-#define nvgImagePattern _nvgImagePattern
-#define nvgStrokeColor _nvgStrokeColor
-#define nvgStrokePaint _nvgStrokePaint
-#define nvgFillColor _nvgFillColor
-#define nvgFillPaint _nvgFillPaint
-#define nvgBoxGradient _nvgBoxGradient
-#define nvgRadialGradient _nvgRadialGradient
-
 #define NVG_PI 3.14159265358979323846264338327f
 
 #ifdef _MSC_VER
@@ -617,27 +607,17 @@ NVGparams* nvgInternalParams(NVGcontext* ctx);
 // Debug function to dump cached path data.
 void nvgDebugDumpPathCache(NVGcontext* ctx);
 
-// undefine our macros, so that we can use the names for our new "pass
-// by reference" versions
-#undef nvgLinearGradient
-#undef nvgImagePattern
-#undef nvgStrokeColor
-#undef nvgStrokePaint
-#undef nvgFillColor
-#undef nvgFillPaint
-#undef nvgBoxGradient
-#undef nvgRadialGradient
+// helper functions which pass structs by reference, rather than value
+// useful in FFI applications
 
-// @benswift hacks: helper functions which pass structs by reference,
-// rather than value useful in FFI applications
-NVGpaint* nvgRadialGradient(NVGcontext* ctx, float cx, float cy, float inr, float outr, NVGcolor* icol, NVGcolor* ocol);
-NVGpaint* nvgLinearGradient(NVGcontext* ctx, float sx, float sy, float ex, float ey, NVGcolor* icol, NVGcolor* ocol);
-NVGpaint* nvgImagePattern(NVGcontext* ctx, float cx, float cy, float w, float h, float angle, int image, float alpha);
-void nvgStrokeColor(NVGcontext* ctx, NVGcolor* color);
-void nvgStrokePaint(NVGcontext* ctx, NVGpaint* paint);
-void nvgFillColor(NVGcontext* ctx, NVGcolor* color);
-void nvgFillPaint(NVGcontext* ctx, NVGpaint* paint);
-NVGpaint* nvgBoxGradient(NVGcontext* ctx, float x, float y, float w, float h, float r, float f, NVGcolor* icol, NVGcolor* ocol);
+NVGpaint* _nvgRadialGradient(NVGcontext* ctx, float cx, float cy, float inr, float outr, NVGcolor* icol, NVGcolor* ocol);
+NVGpaint* _nvgLinearGradient(NVGcontext* ctx, float sx, float sy, float ex, float ey, NVGcolor* icol, NVGcolor* ocol);
+NVGpaint* _nvgImagePattern(NVGcontext* ctx, float cx, float cy, float w, float h, float angle, int image, float alpha);
+void _nvgStrokeColor(NVGcontext* ctx, NVGcolor* color);
+void _nvgStrokePaint(NVGcontext* ctx, NVGpaint* paint);
+void _nvgFillColor(NVGcontext* ctx, NVGcolor* color);
+void _nvgFillPaint(NVGcontext* ctx, NVGpaint* paint);
+NVGpaint* _nvgBoxGradient(NVGcontext* ctx, float x, float y, float w, float h, float r, float f, NVGcolor* icol, NVGcolor* ocol);
 
 #ifdef _MSC_VER
 #pragma warning(pop)

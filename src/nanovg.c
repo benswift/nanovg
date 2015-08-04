@@ -31,16 +31,6 @@
 #include <OpenGL/gl3.h>
 #include "nanovg_gl.h"
 
-// sublty rename all the "pass struct by val" functions, so that we can use these names for the "pass by reference" versions implemented at the bottom of this file
-#define nvgLinearGradient _nvgLinearGradient
-#define nvgImagePattern _nvgImagePattern
-#define nvgStrokeColor _nvgStrokeColor
-#define nvgStrokePaint _nvgStrokePaint
-#define nvgFillColor _nvgFillColor
-#define nvgFillPaint _nvgFillPaint
-#define nvgBoxGradient _nvgBoxGradient
-#define nvgRadialGradient _nvgRadialGradient
-
 #ifdef _MSC_VER
 #pragma warning(disable: 4100)  // unreferenced formal parameter
 #pragma warning(disable: 4127)  // conditional expression is constant
@@ -2767,71 +2757,63 @@ void nvgTextMetrics(NVGcontext* ctx, float* ascender, float* descender, float* l
 		*lineh *= invscale;
 }
 
-// undefine our macros, so that we can use the names for our new "pass
-// by reference" versions
-#undef nvgLinearGradient
-#undef nvgImagePattern
-#undef nvgStrokeColor
-#undef nvgStrokePaint
-#undef nvgFillColor
-#undef nvgFillPaint
-#undef nvgBoxGradient
-#undef nvgRadialGradient
+// helper functions which pass structs by reference, rather than value
+// useful in FFI applications
 
-NVGpaint* nvgBoxGradient(NVGcontext* ctx,
+NVGpaint* _nvgBoxGradient(NVGcontext* ctx,
                           float x, float y, float w, float h, float r, float f,
                           NVGcolor* icol, NVGcolor* ocol)
 {
   NVGpaint* paint = (NVGpaint*)malloc(sizeof(NVGpaint));
-  *paint = _nvgBoxGradient(ctx, x, y, w, h, r, f, *icol, *ocol);
+  *paint = nvgBoxGradient(ctx, x, y, w, h, r, f, *icol, *ocol);
   return paint;
 }
 
-NVGpaint* nvgRadialGradient(NVGcontext* ctx,
+NVGpaint* _nvgRadialGradient(NVGcontext* ctx,
                              float cx, float cy, float inr, float outr,
                              NVGcolor* icol, NVGcolor* ocol)
 {
   NVGpaint* paint = (NVGpaint*)malloc(sizeof(NVGpaint));
-  *paint = _nvgRadialGradient(ctx, cx, cy, inr, outr, *icol, *ocol);
+  *paint = nvgRadialGradient(ctx, cx, cy, inr, outr, *icol, *ocol);
   return paint;
 }
 
-NVGpaint* nvgLinearGradient(NVGcontext* ctx,
+NVGpaint* _nvgLinearGradient(NVGcontext* ctx,
                             float sx, float sy, float ex, float ey,
                             NVGcolor* icol, NVGcolor* ocol)
 {
   NVGpaint* paint = (NVGpaint*)malloc(sizeof(NVGpaint));
-  *paint = _nvgLinearGradient(ctx, sx, sy, ex, ey, *icol, *ocol);
+  *paint = nvgLinearGradient(ctx, sx, sy, ex, ey, *icol, *ocol);
   return paint;
 }
 
-NVGpaint* nvgImagePattern(NVGcontext* ctx,
+NVGpaint* _nvgImagePattern(NVGcontext* ctx,
                           float cx, float cy, float w, float h, float angle,
                           int image, float alpha)
 {
   NVGpaint* paint = (NVGpaint*)malloc(sizeof(NVGpaint));
-  *paint = _nvgImagePattern(ctx, cx, cy, w, h, angle, image, alpha);
+  *paint = nvgImagePattern(ctx, cx, cy, w, h, angle, image, alpha);
   return paint;
 }
 
-void nvgStrokeColor(NVGcontext* ctx, NVGcolor* color)
+void _nvgStrokeColor(NVGcontext* ctx, NVGcolor* color)
 {
-  _nvgStrokeColor(ctx, *color);
+  nvgStrokeColor(ctx, *color);
 }
 
-void nvgStrokePaint(NVGcontext* ctx, NVGpaint* paint)
+void _nvgStrokePaint(NVGcontext* ctx, NVGpaint* paint)
 {
-  _nvgStrokePaint(ctx, *paint);
+  nvgStrokePaint(ctx, *paint);
 }
 
-void nvgFillColor(NVGcontext* ctx, NVGcolor* color)
+void _nvgFillColor(NVGcontext* ctx, NVGcolor* color)
 {
-  _nvgFillColor(ctx, *color);
+  nvgFillColor(ctx, *color);
 }
 
-void nvgFillPaint(NVGcontext* ctx, NVGpaint* paint)
+void _nvgFillPaint(NVGcontext* ctx, NVGpaint* paint)
 {
-  _nvgFillPaint(ctx, *paint);
+  nvgFillPaint(ctx, *paint);
 }
 
 // vim: ft=c nu noet ts=4
