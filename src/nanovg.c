@@ -2812,14 +2812,26 @@ void _nvgFillPaint(NVGcontext* ctx, NVGpaint* paint)
   nvgFillPaint(ctx, *paint);
 }
 
-// for Extempore, we require the GL3 implementation - this here to
-// make sure it gets built into the shared lib
+// for Extempore, we require the GL3 implementation - this stuff is
+// here to link against the OpenGL headers on each platform and make
+// sure it gets built into the shared lib
 
 #ifdef __APPLE__
 #include <OpenGL/gl3.h>
 #else
 #include <GL/gl.h>
 #endif
+
+/* this stolen from GLFW3 */
+
+/* Some Windows OpenGL headers need this.
+ */
+#if !defined(WINGDIAPI) && defined(_WIN32)
+ #define WINGDIAPI __declspec(dllimport)
+ #define GLFW_WINGDIAPI_DEFINED
+#endif /* WINGDIAPI */
+
+/* now, include the nvgCreateGL3 header */
 
 #define NANOVG_GL3_IMPLEMENTATION
 #include "nanovg_gl.h"
