@@ -2816,24 +2816,30 @@ void _nvgFillPaint(NVGcontext* ctx, NVGpaint* paint)
 // here to link against the OpenGL headers on each platform and make
 // sure it gets built into the shared lib
 
-#ifdef __APPLE__
+#ifdef _WIN32
+#define GLEW_STATIC
+#include <GL/glew.h>
+
+int nvg_init_glew(){
+	glewExperimental = GL_TRUE;
+	if(glewInit() != GLEW_OK) {
+		printf("Could not init glew.\n");
+		return -1;
+	}
+	// GLEW generates GL error because it calls glGetString(GL_EXTENSIONS), we'll consume it here.
+	glGetError();
+  return 0;
+}
+
+#elif __APPLE__
 #include <OpenGL/gl3.h>
-#else
-#include <GL/gl.h>
+#elif __linux__
+#include <gl/GL.h>
 #endif
-
-/* this stolen from GLFW3 */
-
-/* Some Windows OpenGL headers need this.
- */
-#if !defined(WINGDIAPI) && defined(_WIN32)
- #define WINGDIAPI __declspec(dllimport)
- #define GLFW_WINGDIAPI_DEFINED
-#endif /* WINGDIAPI */
-
-/* now, include the nvgCreateGL3 header */
 
 #define NANOVG_GL3_IMPLEMENTATION
 #include "nanovg_gl.h"
+
+// end Extempore block
 
 // vim: ft=c nu noet ts=4
