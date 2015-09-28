@@ -2834,7 +2834,7 @@ int nvg_init_glew(){
 #elif __APPLE__
 #include <OpenGL/gl3.h>
 #elif __linux__
-#include <gl/GL.h>
+#include <GL/gl.h>
 #endif
 
 #define NANOVG_GL3_IMPLEMENTATION
