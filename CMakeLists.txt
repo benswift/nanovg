@@ -31,4 +31,4 @@ install(TARGETS nanovg
   LIBRARY DESTINATION lib
   RUNTIME DESTINATION lib)
 
-install(FILES nanovg.h nanovg_gl.h DESTINATION include)
+install(FILES src/nanovg.h src/nanovg_gl.h DESTINATION include)
