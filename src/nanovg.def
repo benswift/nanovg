@@ -102,3 +102,4 @@ _nvgStrokeColor @100
 _nvgStrokePaint @101
 _nvgFillColor @102
 _nvgFillPaint @103
+nvg_init_glew @104
