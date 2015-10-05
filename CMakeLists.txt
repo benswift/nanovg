@@ -13,19 +13,13 @@ target_link_libraries(nanovg PRIVATE ${OPENGL_LIBRARIES})
 
 if(WIN32)
   target_sources(nanovg PRIVATE src/nanovg.def)
-  target_include_directories(nanovg
-    PRIVATE c:/Users/ben/Code/glew-1.13.0/include)
-  target_link_libraries(nanovg
-    PRIVATE c:/Users/ben/Code/glew-1.13.0/cmake-build/lib/Release/libglew32.lib)
+  find_path(GLEW_INCLUDE_DIRS GL/glew.h
+    PATHS ${GLEW_DIR}/include)
+  find_library(GLEW_LIBRARY libglew32
+    PATHS ${GLEW_DIR}/lib)
+  target_include_directories(nanovg PRIVATE ${GLEW_INCLUDE_DIRS})
+  target_link_libraries(nanovg PRIVATE ${GLEW_LIBRARY})
 endif()
-
-# if(WIN32)
-#   # find_package(GLEW REQUIRED)
-#   # target_include_directories(nanovg PRIVATE ${GLEW_INCLUDE_DIRS})
-#   # target_link_libraries(nanovg PRIVATE ${GLEW_LIBRARIES})
-#   target_compile_definitions(nanovg
-#     PRIVATE -DNANOVG_GLEW)
-# endif()
 
 install(TARGETS nanovg
   LIBRARY DESTINATION lib
