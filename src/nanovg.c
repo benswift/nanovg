@@ -2820,7 +2820,7 @@ void _nvgFillPaint(NVGcontext* ctx, NVGpaint* paint)
 #define GLEW_STATIC
 #include <GL/glew.h>
 
-int nvg_init_glew(){
+int nvgInit(){
 	glewExperimental = GL_TRUE;
 	if(glewInit() != GLEW_OK) {
 		printf("Could not init glew.\n");
@@ -2833,13 +2833,23 @@ int nvg_init_glew(){
 
 #elif __APPLE__
 #include <OpenGL/gl3.h>
+
+int nvgInit(){
+  // we don't use GLEW on OSX, so init doesn't do anything
+  return 0;
+}
+
 #elif __linux__
 #include <GL/gl.h>
+
+int nvgInit(){
+  // we don't use GLEW on Linux, so init doesn't do anything
+  return 0;
+}
+
 #endif
 
 #define NANOVG_GL3_IMPLEMENTATION
 #include "nanovg_gl.h"
-
-// end Extempore block
 
 // vim: ft=c nu noet ts=4
