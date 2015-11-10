@@ -2824,11 +2824,11 @@ int nvgInit(){
 	glewExperimental = GL_TRUE;
 	if(glewInit() != GLEW_OK) {
 		printf("Could not init glew.\n");
-		return -1;
+		return GL_FALSE;
 	}
 	// GLEW generates GL error because it calls glGetString(GL_EXTENSIONS), we'll consume it here.
 	glGetError();
-  return 0;
+  return GL_TRUE;
 }
 
 #elif __APPLE__
@@ -2836,7 +2836,7 @@ int nvgInit(){
 
 int nvgInit(){
   // we don't use GLEW on OSX, so init doesn't do anything
-  return 0;
+  return GL_TRUE;
 }
 
 #elif __linux__
@@ -2844,7 +2844,7 @@ int nvgInit(){
 
 int nvgInit(){
   // we don't use GLEW on Linux, so init doesn't do anything
-  return 0;
+  return GL_TRUE;
 }
 
 #endif
