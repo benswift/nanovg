@@ -9,7 +9,8 @@ target_include_directories(nanovg PRIVATE src)
 
 if(WIN32)
   target_sources(nanovg
-    PRIVATE src/glew.c)
+    PRIVATE src/glew.c
+    PRIVATE src/nanovg.def)
   target_compile_definitions(nanovg
     PRIVATE -DGLEW_STATIC)
 endif()
