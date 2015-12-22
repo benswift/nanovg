@@ -19,7 +19,8 @@ target_include_directories(nanovg PRIVATE ${OPENGL_INCLUDE_DIRS})
 target_link_libraries(nanovg PRIVATE ${OPENGL_LIBRARIES})
 
 install(TARGETS nanovg
-  LIBRARY DESTINATION lib
-  RUNTIME DESTINATION lib)
+  RUNTIME DESTINATION lib
+  ARCHIVE DESTINATION lib # for .lib files on Windows
+  LIBRARY DESTINATION lib)
 
 install(FILES src/nanovg.h src/nanovg_gl.h DESTINATION include)
