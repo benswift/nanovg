@@ -10,6 +10,8 @@ target_include_directories(nanovg PRIVATE src)
 if(WIN32)
   target_sources(nanovg
     PRIVATE src/glew.c)
+  target_compile_definitions(nanovg
+    PRIVATE -DGLEW_STATIC)
 endif()
 
 find_package(OpenGL REQUIRED)
