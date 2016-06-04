@@ -2,10 +2,16 @@ cmake_minimum_required(VERSION 3.1)
 
 project(nanovg)
 
+find_package(OpenGL REQUIRED)
+
 add_library(nanovg SHARED
   src/nanovg.c)
 
 target_include_directories(nanovg PRIVATE src)
+
+# this is dangerous - it should just use dynamic lookup for the two
+# symbols above, but I can't find the magic cmake flags for that
+set(CMAKE_SHARED_LINKER_FLAGS "${CMAKE_SHARED_LINKER_FLAGS} -undefined dynamic_lookup")
 
 if(WIN32)
   target_sources(nanovg
@@ -15,7 +21,6 @@ if(WIN32)
     PRIVATE -DGLEW_STATIC)
 endif()
 
-find_package(OpenGL REQUIRED)
 target_include_directories(nanovg PRIVATE ${OPENGL_INCLUDE_DIRS})
 target_link_libraries(nanovg PRIVATE ${OPENGL_LIBRARIES})
 
