@@ -9,9 +9,12 @@ add_library(nanovg SHARED
 
 target_include_directories(nanovg PRIVATE src)
 
-# this is dangerous - it should just use dynamic lookup for the two
-# symbols above, but I can't find the magic cmake flags for that
-set(CMAKE_SHARED_LINKER_FLAGS "${CMAKE_SHARED_LINKER_FLAGS} -undefined dynamic_lookup")
+# this is dangerous - it use dynamic lookup for
+# llvm_zone_malloc_from_current_zone *only* but I can't find the magic
+# cmake flags for that
+if(APPLE)
+  set(CMAKE_SHARED_LINKER_FLAGS "${CMAKE_SHARED_LINKER_FLAGS} -undefined dynamic_lookup")
+endif(APPLE)
 
 if(WIN32)
   target_sources(nanovg

@@ -186,16 +186,16 @@ void nvgReset(NVGcontext* ctx);
 // Current render style can be saved and restored using nvgSave() and nvgRestore(). 
 
 // Sets current stroke style to a solid color.
-void nvgStrokeColor(NVGcontext* ctx, NVGcolor color);
+void nvgStrokeColor(NVGcontext* ctx, NVGcolor *color);
 
 // Sets current stroke style to a paint, which can be a one of the gradients or a pattern.
-void nvgStrokePaint(NVGcontext* ctx, NVGpaint paint);
+void nvgStrokePaint(NVGcontext* ctx, NVGpaint *paint);
 
 // Sets current fill style to a solid color.
-void nvgFillColor(NVGcontext* ctx, NVGcolor color);
+void nvgFillColor(NVGcontext* ctx, NVGcolor *color);
 
 // Sets current fill style to a paint, which can be a one of the gradients or a pattern.
-void nvgFillPaint(NVGcontext* ctx, NVGpaint paint);
+void nvgFillPaint(NVGcontext* ctx, NVGpaint *paint);
 
 // Sets the miter limit of the stroke style.
 // Miter limit controls when a sharp corner is beveled.
@@ -341,27 +341,27 @@ void nvgDeleteImage(NVGcontext* ctx, int image);
 // Creates and returns a linear gradient. Parameters (sx,sy)-(ex,ey) specify the start and end coordinates
 // of the linear gradient, icol specifies the start color and ocol the end color.
 // The gradient is transformed by the current transform when it is passed to nvgFillPaint() or nvgStrokePaint().
-NVGpaint nvgLinearGradient(NVGcontext* ctx, float sx, float sy, float ex, float ey,
-						   NVGcolor icol, NVGcolor ocol);
+NVGpaint* nvgLinearGradient(NVGcontext* ctx, float sx, float sy, float ex, float ey,
+						   NVGcolor *icol, NVGcolor *ocol);
 
 // Creates and returns a box gradient. Box gradient is a feathered rounded rectangle, it is useful for rendering
 // drop shadows or highlights for boxes. Parameters (x,y) define the top-left corner of the rectangle,
 // (w,h) define the size of the rectangle, r defines the corner radius, and f feather. Feather defines how blurry
 // the border of the rectangle is. Parameter icol specifies the inner color and ocol the outer color of the gradient.
 // The gradient is transformed by the current transform when it is passed to nvgFillPaint() or nvgStrokePaint().
-NVGpaint nvgBoxGradient(NVGcontext* ctx, float x, float y, float w, float h,
-						float r, float f, NVGcolor icol, NVGcolor ocol);
+NVGpaint* nvgBoxGradient(NVGcontext* ctx, float x, float y, float w, float h,
+						float r, float f, NVGcolor *icol, NVGcolor *ocol);
 
 // Creates and returns a radial gradient. Parameters (cx,cy) specify the center, inr and outr specify
 // the inner and outer radius of the gradient, icol specifies the start color and ocol the end color.
 // The gradient is transformed by the current transform when it is passed to nvgFillPaint() or nvgStrokePaint().
-NVGpaint nvgRadialGradient(NVGcontext* ctx, float cx, float cy, float inr, float outr,
-						   NVGcolor icol, NVGcolor ocol);
+NVGpaint* nvgRadialGradient(NVGcontext* ctx, float cx, float cy, float inr, float outr,
+						   NVGcolor *icol, NVGcolor *ocol);
 
 // Creates and returns an image patter. Parameters (ox,oy) specify the left-top location of the image pattern,
 // (ex,ey) the size of one image, angle rotation around the top-left corner, image is handle to the image to render.
 // The gradient is transformed by the current transform when it is passed to nvgFillPaint() or nvgStrokePaint().
-NVGpaint nvgImagePattern(NVGcontext* ctx, float ox, float oy, float ex, float ey,
+NVGpaint* nvgImagePattern(NVGcontext* ctx, float ox, float oy, float ex, float ey,
 						 float angle, int image, float alpha);
 
 //

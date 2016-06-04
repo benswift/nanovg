@@ -680,29 +680,29 @@ void nvgCurrentTransform(NVGcontext* ctx, float* xform)
 	memcpy(xform, state->xform, sizeof(float)*6);
 }
 
-void nvgStrokeColor(NVGcontext* ctx, NVGcolor color)
+void nvgStrokeColor(NVGcontext* ctx, NVGcolor *color)
 {
 	NVGstate* state = nvg__getState(ctx);
-	nvg__setPaintColor(&state->stroke, color);
+	nvg__setPaintColor(&state->stroke, *color);
 }
 
-void nvgStrokePaint(NVGcontext* ctx, NVGpaint paint)
+void nvgStrokePaint(NVGcontext* ctx, NVGpaint *paint)
 {
 	NVGstate* state = nvg__getState(ctx);
-	state->stroke = paint;
+	state->stroke = *paint;
 	nvgTransformMultiply(state->stroke.xform, state->xform);
 }
 
-void nvgFillColor(NVGcontext* ctx, NVGcolor color)
+void nvgFillColor(NVGcontext* ctx, NVGcolor *color)
 {
 	NVGstate* state = nvg__getState(ctx);
-	nvg__setPaintColor(&state->fill, color);
+	nvg__setPaintColor(&state->fill, *color);
 }
 
-void nvgFillPaint(NVGcontext* ctx, NVGpaint paint)
+void nvgFillPaint(NVGcontext* ctx, NVGpaint *paint)
 {
 	NVGstate* state = nvg__getState(ctx);
-	state->fill = paint;
+	state->fill = *paint;
 	nvgTransformMultiply(state->fill.xform, state->xform);
 }
 
@@ -757,15 +757,19 @@ void nvgDeleteImage(NVGcontext* ctx, int image)
 	ctx->params.renderDeleteTexture(ctx->params.userPtr, image);
 }
 
-NVGpaint nvgLinearGradient(NVGcontext* ctx,
+// this symbol will be undefined at compile time - it's in the
+// Extempore executable
+void* llvm_zone_malloc_from_current_zone(uint64_t size);
+
+NVGpaint* nvgLinearGradient(NVGcontext* ctx,
 								  float sx, float sy, float ex, float ey,
-								  NVGcolor icol, NVGcolor ocol)
+								  NVGcolor *icol, NVGcolor *ocol)
 {
-	NVGpaint p;
+	NVGpaint *p = (NVGpaint*)llvm_zone_malloc_from_current_zone(sizeof(NVGpaint));
+	NVG_NOTUSED(ctx);
+	// memset(p, 0, sizeof(NVGpaint)); // zone memory should be zeroed
 	float dx, dy, d;
 	const float large = 1e5;
-	NVG_NOTUSED(ctx);
-	memset(&p, 0, sizeof(p));
 
 	// Calculate transform aligned to the line
 	dx = ex - sx;
@@ -779,94 +783,94 @@ NVGpaint nvgLinearGradient(NVGcontext* ctx,
 		dy = 1;
 	}
 
-	p.xform[0] = dy; p.xform[1] = -dx;
-	p.xform[2] = dx; p.xform[3] = dy;
-	p.xform[4] = sx - dx*large; p.xform[5] = sy - dy*large;
+	p->xform[0] = dy; p->xform[1] = -dx;
+	p->xform[2] = dx; p->xform[3] = dy;
+	p->xform[4] = sx - dx*large; p->xform[5] = sy - dy*large;
 
-	p.extent[0] = large;
-	p.extent[1] = large + d*0.5f;
+	p->extent[0] = large;
+	p->extent[1] = large + d*0.5f;
 
-	p.radius = 0.0f;
+	p->radius = 0.0f;
 
-	p.feather = nvg__maxf(1.0f, d);
+	p->feather = nvg__maxf(1.0f, d);
 
-	p.innerColor = icol;
-	p.outerColor = ocol;
+	p->innerColor = *icol;
+	p->outerColor = *ocol;
 
 	return p;
 }
 
-NVGpaint nvgRadialGradient(NVGcontext* ctx,
+NVGpaint* nvgRadialGradient(NVGcontext* ctx,
 								  float cx, float cy, float inr, float outr,
-								  NVGcolor icol, NVGcolor ocol)
+								  NVGcolor *icol, NVGcolor *ocol)
 {
-	NVGpaint p;
+	NVGpaint *p = (NVGpaint*)llvm_zone_malloc_from_current_zone(sizeof(NVGpaint));
+	NVG_NOTUSED(ctx);
+	// memset(p, 0, sizeof(NVGpaint)); // zone memory should be zeroed
 	float r = (inr+outr)*0.5f;
 	float f = (outr-inr);
-	NVG_NOTUSED(ctx);
-	memset(&p, 0, sizeof(p));
 
-	nvgTransformIdentity(p.xform);
-	p.xform[4] = cx;
-	p.xform[5] = cy;
+	nvgTransformIdentity(p->xform);
+	p->xform[4] = cx;
+	p->xform[5] = cy;
 
-	p.extent[0] = r;
-	p.extent[1] = r;
+	p->extent[0] = r;
+	p->extent[1] = r;
 
-	p.radius = r;
+	p->radius = r;
 
-	p.feather = nvg__maxf(1.0f, f);
+	p->feather = nvg__maxf(1.0f, f);
 
-	p.innerColor = icol;
-	p.outerColor = ocol;
+	p->innerColor = *icol;
+	p->outerColor = *ocol;
 
 	return p;
 }
 
-NVGpaint nvgBoxGradient(NVGcontext* ctx,
+NVGpaint* nvgBoxGradient(NVGcontext* ctx,
 							   float x, float y, float w, float h, float r, float f,
-							   NVGcolor icol, NVGcolor ocol)
+							   NVGcolor *icol, NVGcolor *ocol)
 {
-	NVGpaint p;
+	NVGpaint *p = (NVGpaint*)llvm_zone_malloc_from_current_zone(sizeof(NVGpaint));
 	NVG_NOTUSED(ctx);
-	memset(&p, 0, sizeof(p));
+	// memset(p, 0, sizeof(NVGpaint)); // zone memory should be zeroed
 
-	nvgTransformIdentity(p.xform);
-	p.xform[4] = x+w*0.5f;
-	p.xform[5] = y+h*0.5f;
+	nvgTransformIdentity(p->xform);
+	p->xform[4] = x+w*0.5f;
+	p->xform[5] = y+h*0.5f;
 
-	p.extent[0] = w*0.5f;
-	p.extent[1] = h*0.5f;
+	p->extent[0] = w*0.5f;
+	p->extent[1] = h*0.5f;
 
-	p.radius = r;
+	p->radius = r;
 
-	p.feather = nvg__maxf(1.0f, f);
+	p->feather = nvg__maxf(1.0f, f);
 
-	p.innerColor = icol;
-	p.outerColor = ocol;
+	p->innerColor = *icol;
+	p->outerColor = *ocol;
 
 	return p;
 }
 
 
-NVGpaint nvgImagePattern(NVGcontext* ctx,
+NVGpaint* nvgImagePattern(NVGcontext* ctx,
 								float cx, float cy, float w, float h, float angle,
 								int image, float alpha)
 {
-	NVGpaint p;
+	NVGpaint *p = (NVGpaint*)llvm_zone_malloc_from_current_zone(sizeof(NVGpaint));
 	NVG_NOTUSED(ctx);
-	memset(&p, 0, sizeof(p));
+	// memset(p, 0, sizeof(NVGpaint)); // zone memory should be zeroed
 
-	nvgTransformRotate(p.xform, angle);
-	p.xform[4] = cx;
-	p.xform[5] = cy;
+	nvgTransformRotate(p->xform, angle);
+	p->xform[4] = cx;
+	p->xform[5] = cy;
 
-	p.extent[0] = w;
-	p.extent[1] = h;
+	p->extent[0] = w;
+	p->extent[1] = h;
 
-	p.image = image;
+	p->image = image;
 
-	p.innerColor = p.outerColor = nvgRGBAf(1,1,1,alpha);
+	p->innerColor = p->outerColor = nvgRGBAf(1,1,1,alpha);
 
 	return p;
 }
@@ -2751,67 +2755,6 @@ void nvgTextMetrics(NVGcontext* ctx, float* ascender, float* descender, float* l
 		*descender *= invscale;
 	if (lineh != NULL)
 		*lineh *= invscale;
-}
-
-// helper functions which pass structs by reference, rather than value
-// useful in FFI applications
-
-void* llvm_zone_malloc_from_current_zone(uint64_t size);
-
-NVGpaint* _nvgBoxGradient(NVGcontext* ctx,
-                          float x, float y, float w, float h, float r, float f,
-                          NVGcolor* icol, NVGcolor* ocol)
-{
-  NVGpaint* paint = (NVGpaint*)llvm_zone_malloc_from_current_zone(sizeof(NVGpaint));
-  *paint = nvgBoxGradient(ctx, x, y, w, h, r, f, *icol, *ocol);
-  return paint;
-}
-
-NVGpaint* _nvgRadialGradient(NVGcontext* ctx,
-                             float cx, float cy, float inr, float outr,
-                             NVGcolor* icol, NVGcolor* ocol)
-{
-  NVGpaint* paint = (NVGpaint*)llvm_zone_malloc_from_current_zone(sizeof(NVGpaint));
-  *paint = nvgRadialGradient(ctx, cx, cy, inr, outr, *icol, *ocol);
-  return paint;
-}
-
-NVGpaint* _nvgLinearGradient(NVGcontext* ctx,
-                            float sx, float sy, float ex, float ey,
-                            NVGcolor* icol, NVGcolor* ocol)
-{
-  NVGpaint* paint = (NVGpaint*)llvm_zone_malloc_from_current_zone(sizeof(NVGpaint));
-  *paint = nvgLinearGradient(ctx, sx, sy, ex, ey, *icol, *ocol);
-  return paint;
-}
-
-NVGpaint* _nvgImagePattern(NVGcontext* ctx,
-                          float cx, float cy, float w, float h, float angle,
-                          int image, float alpha)
-{
-  NVGpaint* paint = (NVGpaint*)llvm_zone_malloc_from_current_zone(sizeof(NVGpaint));
-  *paint = nvgImagePattern(ctx, cx, cy, w, h, angle, image, alpha);
-  return paint;
-}
-
-void _nvgStrokeColor(NVGcontext* ctx, NVGcolor* color)
-{
-  nvgStrokeColor(ctx, *color);
-}
-
-void _nvgStrokePaint(NVGcontext* ctx, NVGpaint* paint)
-{
-  nvgStrokePaint(ctx, *paint);
-}
-
-void _nvgFillColor(NVGcontext* ctx, NVGcolor* color)
-{
-  nvgFillColor(ctx, *color);
-}
-
-void _nvgFillPaint(NVGcontext* ctx, NVGpaint* paint)
-{
-  nvgFillPaint(ctx, *paint);
 }
 
 // for Extempore, we require the GL3 implementation - this stuff is
