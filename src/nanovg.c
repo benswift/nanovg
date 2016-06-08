@@ -759,7 +759,7 @@ void nvgDeleteImage(NVGcontext* ctx, int image)
 
 // this symbol will be undefined at compile time - it's in the
 // Extempore executable
-void* llvm_zone_malloc_from_current_zone(uint64_t size);
+void* llvm_zone_malloc_from_current_zone(uint64_t);
 
 NVGpaint* nvgLinearGradient(NVGcontext* ctx,
 								  float sx, float sy, float ex, float ey,
