@@ -94,12 +94,4 @@ nvgInternalParams @92
 nvgDebugDumpPathCache @93
 nvgCreateGL3 @94
 nvgDeleteGL3 @95
-_nvgLinearGradient @96
-_nvgBoxGradient @97
-_nvgRadialGradient @98
-_nvgImagePattern @99
-_nvgStrokeColor @100
-_nvgStrokePaint @101
-_nvgFillColor @102
-_nvgFillPaint @103
 nvgInit @104
