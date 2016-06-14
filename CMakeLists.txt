@@ -17,11 +17,15 @@ if(APPLE)
 endif(APPLE)
 
 if(WIN32)
+  if(NOT EXTEMPORE_LIB_PATH)
+    message(FATAL_ERROR "EXTEMPORE_LIB_PATH not set\n\nThis should point to extempore.lib, e.g. -DEXTEMPORE_LIB_PATH=c:/Users/ben/Code/extempore/libs/platform-shlibs/extempore.lib")
+  endif()
   target_sources(nanovg
     PRIVATE src/glew.c
     PRIVATE src/nanovg.def)
   target_compile_definitions(nanovg
     PRIVATE -DGLEW_STATIC)
+  target_link_libraries(nanovg PRIVATE "${EXTEMPORE_LIB_PATH}")
 endif()
 
 target_include_directories(nanovg PRIVATE ${OPENGL_INCLUDE_DIRS})
