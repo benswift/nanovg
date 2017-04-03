@@ -94,4 +94,10 @@ nvgInternalParams @92
 nvgDebugDumpPathCache @93
 nvgCreateGL3 @94
 nvgDeleteGL3 @95
+nvgGlobalCompositeOperation @96
+nvgGlobalCompositeBlendFunc @97
+nvgGlobalCompositeBlendFuncSeparate @98
+nvgRoundedRectVarying @99
+nvgAddFallbackFontId @100
+nvgAddFallbackFont @101
 nvgInit @104
