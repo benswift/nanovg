@@ -5,16 +5,15 @@ solution "nanovg"
 	location ( "build" )
 	configurations { "Debug", "Release" }
 	platforms {"native", "x64", "x32"}
-	
+
    	project "nanovg"
 		language "C"
-		kind "SharedLib"
+		kind "StaticLib"
 		includedirs { "src" }
 		files { "src/*.c" }
 		targetdir("build")
-    links { "freetype" }
-    defines { "_CRT_SECURE_NO_WARNINGS", "FONS_USE_FREETYPE", "NANOVG_GL3_IMPLEMENTATION" }
-		
+		defines { "_CRT_SECURE_NO_WARNINGS" } --,"FONS_USE_FREETYPE" } Uncomment to compile with FreeType support
+
 		configuration "Debug"
 			defines { "DEBUG" }
 			flags { "Symbols", "ExtraWarnings"}
@@ -22,9 +21,6 @@ solution "nanovg"
 		configuration "Release"
 			defines { "NDEBUG" }
 			flags { "Optimize", "ExtraWarnings"}
-
-		configuration { "macosx" }
-			linkoptions { "-framework OpenGL" }
 
 	project "example_gl2"
 
@@ -46,7 +42,7 @@ solution "nanovg"
 
 		configuration { "macosx" }
 			links { "glfw3" }
-			linkoptions { "-framework OpenGL", "-framework Cocoa", "-framework IOKit", "-framework CoreVideo" }
+			linkoptions { "-framework OpenGL", "-framework Cocoa", "-framework IOKit", "-framework CoreVideo", "-framework Carbon" }
 
 		configuration "Debug"
 			defines { "DEBUG" }
@@ -75,7 +71,7 @@ solution "nanovg"
 
 		configuration { "macosx" }
 			links { "glfw3" }
-			linkoptions { "-framework OpenGL", "-framework Cocoa", "-framework IOKit", "-framework CoreVideo" }
+			linkoptions { "-framework OpenGL", "-framework Cocoa", "-framework IOKit", "-framework CoreVideo", "-framework Carbon" }
 
 		configuration "Debug"
 			defines { "DEBUG" }
@@ -105,7 +101,7 @@ solution "nanovg"
 
 		configuration { "macosx" }
 			links { "glfw3" }
-			linkoptions { "-framework OpenGL", "-framework Cocoa", "-framework IOKit", "-framework CoreVideo" }
+			linkoptions { "-framework OpenGL", "-framework Cocoa", "-framework IOKit", "-framework CoreVideo", "-framework Carbon" }
 
 		configuration "Debug"
 			defines { "DEBUG" }
@@ -135,7 +131,7 @@ solution "nanovg"
 
 		configuration { "macosx" }
 			links { "glfw3" }
-			linkoptions { "-framework OpenGL", "-framework Cocoa", "-framework IOKit", "-framework CoreVideo" }
+			linkoptions { "-framework OpenGL", "-framework Cocoa", "-framework IOKit", "-framework CoreVideo", "-framework Carbon" }
 
 		configuration "Debug"
 			defines { "DEBUG" }
@@ -163,7 +159,7 @@ solution "nanovg"
 
 		configuration { "macosx" }
 			links { "glfw3" }
-			linkoptions { "-framework OpenGL", "-framework Cocoa", "-framework IOKit", "-framework CoreVideo" }
+			linkoptions { "-framework OpenGL", "-framework Cocoa", "-framework IOKit", "-framework CoreVideo", "-framework Carbon" }
 
 		configuration "Debug"
 			defines { "DEBUG" }
@@ -191,7 +187,7 @@ solution "nanovg"
 
 		configuration { "macosx" }
 			links { "glfw3" }
-			linkoptions { "-framework OpenGL", "-framework Cocoa", "-framework IOKit", "-framework CoreVideo" }
+			linkoptions { "-framework OpenGL", "-framework Cocoa", "-framework IOKit", "-framework CoreVideo", "-framework Carbon" }
 
 		configuration "Debug"
 			defines { "DEBUG" }
@@ -219,7 +215,7 @@ solution "nanovg"
 
 		configuration { "macosx" }
 			links { "glfw3" }
-			linkoptions { "-framework OpenGL", "-framework Cocoa", "-framework IOKit", "-framework CoreVideo" }
+			linkoptions { "-framework OpenGL", "-framework Cocoa", "-framework IOKit", "-framework CoreVideo", "-framework Carbon" }
 
 		configuration "Debug"
 			defines { "DEBUG" }
