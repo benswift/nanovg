@@ -2897,43 +2897,4 @@ void nvgTextMetrics(NVGcontext* ctx, float* ascender, float* descender, float* l
 		*lineh *= invscale;
 }
 
-// for Extempore, we require the GL3 implementation - this stuff is
-// here to link against the OpenGL headers on each platform and make
-// sure it gets built into the shared lib
-
-#ifdef _WIN32
-#include <GL/glew.h>
-
-int nvgInit(){
-	glewExperimental = GL_TRUE;
-	if(glewInit() != GLEW_OK) {
-		printf("Could not init glew.\n");
-		return GL_FALSE;
-	}
-	// GLEW generates GL error because it calls glGetString(GL_EXTENSIONS), we'll consume it here.
-	glGetError();
-  return GL_TRUE;
-}
-
-#elif __APPLE__
-#include <OpenGL/gl3.h>
-
-int nvgInit(){
-  // we don't use GLEW on OSX, so init doesn't do anything
-  return GL_TRUE;
-}
-
-#elif __linux__
-#include <GL/gl.h>
-
-int nvgInit(){
-  // we don't use GLEW on Linux, so init doesn't do anything
-  return GL_TRUE;
-}
-
-#endif
-
-#define NANOVG_GL3_IMPLEMENTATION
-#include "nanovg_gl.h"
-
 // vim: ft=c nu noet ts=4

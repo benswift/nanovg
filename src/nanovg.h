@@ -695,5 +695,3 @@ NVGpaint* _nvgBoxGradient(NVGcontext* ctx, float x, float y, float w, float h, f
 #endif
 
 #endif // NANOVG_H
-
-int nvgInit(void);

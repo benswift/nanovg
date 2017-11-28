@@ -5,7 +5,7 @@ project(nanovg)
 find_package(OpenGL REQUIRED)
 
 add_library(nanovg SHARED
-  src/nanovg.c)
+  src/xtmnanovg.c)
 
 target_include_directories(nanovg PRIVATE src)
 
