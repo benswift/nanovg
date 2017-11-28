@@ -7,9 +7,7 @@
 #ifdef _WIN32
 #include <GL/glew.h>
 
-int nvgInit(void);
-
-int nvgInit(){
+int nvgInit(void){
 	glewExperimental = GL_TRUE;
 	if(glewInit() != GLEW_OK) {
 		printf("Could not init glew.\n");
@@ -23,7 +21,7 @@ int nvgInit(){
 #elif __APPLE__
 #include <OpenGL/gl3.h>
 
-int nvgInit(){
+int nvgInit(void){
   // we don't use GLEW on OSX, so init doesn't do anything
   return GL_TRUE;
 }
