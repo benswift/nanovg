@@ -418,67 +418,78 @@ void nvgEndFrame(NVGcontext* ctx)
 	}
 }
 
-NVGcolor nvgRGB(unsigned char r, unsigned char g, unsigned char b)
+NVGcolor* nvgRGB(unsigned char r, unsigned char g, unsigned char b)
 {
 	return nvgRGBA(r,g,b,255);
 }
 
-NVGcolor nvgRGBf(float r, float g, float b)
+NVGcolor* nvgRGBf(float r, float g, float b)
 {
 	return nvgRGBAf(r,g,b,1.0f);
 }
 
-NVGcolor nvgRGBA(unsigned char r, unsigned char g, unsigned char b, unsigned char a)
+// this symbol will be undefined at compile time - it's in the
+// Extempore executable
+#ifdef _WIN32
+__declspec(dllimport) void* llvm_zone_malloc_from_current_zone(uint64_t);
+#else
+void* llvm_zone_malloc_from_current_zone(uint64_t);
+#endif
+
+NVGcolor* nvgRGBA(unsigned char r, unsigned char g, unsigned char b, unsigned char a)
 {
-	NVGcolor color;
+	NVGcolor *color = (NVGcolor*)llvm_zone_malloc_from_current_zone(sizeof(NVGcolor));
+
 	// Use longer initialization to suppress warning.
-	color.r = r / 255.0f;
-	color.g = g / 255.0f;
-	color.b = b / 255.0f;
-	color.a = a / 255.0f;
+	color->r = r / 255.0f;
+	color->g = g / 255.0f;
+	color->b = b / 255.0f;
+	color->a = a / 255.0f;
 	return color;
 }
 
-NVGcolor nvgRGBAf(float r, float g, float b, float a)
+NVGcolor* nvgRGBAf(float r, float g, float b, float a)
 {
-	NVGcolor color;
+	NVGcolor *color = (NVGcolor*)llvm_zone_malloc_from_current_zone(sizeof(NVGcolor));
+
 	// Use longer initialization to suppress warning.
-	color.r = r;
-	color.g = g;
-	color.b = b;
-	color.a = a;
+	color->r = r;
+	color->g = g;
+	color->b = b;
+	color->a = a;
 	return color;
 }
 
-NVGcolor nvgTransRGBA(NVGcolor c, unsigned char a)
+NVGcolor* nvgTransRGBA(NVGcolor *c, unsigned char a)
 {
-	c.a = a / 255.0f;
+	c->a = a / 255.0f;
 	return c;
 }
 
-NVGcolor nvgTransRGBAf(NVGcolor c, float a)
+NVGcolor* nvgTransRGBAf(NVGcolor *c, float a)
 {
-	c.a = a;
+	c->a = a;
 	return c;
 }
 
-NVGcolor nvgLerpRGBA(NVGcolor c0, NVGcolor c1, float u)
+NVGcolor* nvgLerpRGBA(NVGcolor *c0, NVGcolor *c1, float u)
 {
 	int i;
 	float oneminu;
-	NVGcolor cint = {{{0}}};
+	NVGcolor *cint = (NVGcolor*)llvm_zone_malloc_from_current_zone(sizeof(NVGcolor));
+	memset(cint, 0, sizeof(NVGcolor));
 
 	u = nvg__clampf(u, 0.0f, 1.0f);
 	oneminu = 1.0f - u;
-	for( i = 0; i <4; i++ )
+	for (i = 0; i < 4; i++)
 	{
-		cint.rgba[i] = c0.rgba[i] * oneminu + c1.rgba[i] * u;
+		cint->rgba[i] = c0->rgba[i] * oneminu + c1->rgba[i] * u;
 	}
 
 	return cint;
 }
 
-NVGcolor nvgHSL(float h, float s, float l)
+NVGcolor* nvgHSL(float h, float s, float l)
 {
 	return nvgHSLA(h,s,l,255);
 }
@@ -496,20 +507,21 @@ static float nvg__hue(float h, float m1, float m2)
 	return m1;
 }
 
-NVGcolor nvgHSLA(float h, float s, float l, unsigned char a)
+NVGcolor* nvgHSLA(float h, float s, float l, unsigned char a)
 {
 	float m1, m2;
-	NVGcolor col;
+	NVGcolor *col = (NVGcolor*)llvm_zone_malloc_from_current_zone(sizeof(NVGcolor));
+
 	h = nvg__modf(h, 1.0f);
 	if (h < 0.0f) h += 1.0f;
 	s = nvg__clampf(s, 0.0f, 1.0f);
 	l = nvg__clampf(l, 0.0f, 1.0f);
 	m2 = l <= 0.5f ? (l * (1 + s)) : (l + s - l * s);
 	m1 = 2 * l - m2;
-	col.r = nvg__clampf(nvg__hue(h + 1.0f/3.0f, m1, m2), 0.0f, 1.0f);
-	col.g = nvg__clampf(nvg__hue(h, m1, m2), 0.0f, 1.0f);
-	col.b = nvg__clampf(nvg__hue(h - 1.0f/3.0f, m1, m2), 0.0f, 1.0f);
-	col.a = a/255.0f;
+	col->r = nvg__clampf(nvg__hue(h + 1.0f/3.0f, m1, m2), 0.0f, 1.0f);
+	col->g = nvg__clampf(nvg__hue(h, m1, m2), 0.0f, 1.0f);
+	col->b = nvg__clampf(nvg__hue(h - 1.0f/3.0f, m1, m2), 0.0f, 1.0f);
+	col->a = a/255.0f;
 	return col;
 }
 
@@ -643,8 +655,8 @@ void nvgReset(NVGcontext* ctx)
 	NVGstate* state = nvg__getState(ctx);
 	memset(state, 0, sizeof(*state));
 
-	nvg__setPaintColor(&state->fill, nvgRGBA(255,255,255,255));
-	nvg__setPaintColor(&state->stroke, nvgRGBA(0,0,0,255));
+	nvg__setPaintColor(&state->fill, *nvgRGBA(255,255,255,255));
+	nvg__setPaintColor(&state->stroke, *nvgRGBA(0,0,0,255));
 	state->compositeOperation = nvg__compositeOperationState(NVG_SOURCE_OVER);
 	state->shapeAntiAlias = 1;
 	state->strokeWidth = 1.0f;
@@ -839,14 +851,6 @@ void nvgDeleteImage(NVGcontext* ctx, int image)
 	ctx->params.renderDeleteTexture(ctx->params.userPtr, image);
 }
 
-// this symbol will be undefined at compile time - it's in the
-// Extempore executable
-#ifdef _WIN32
-__declspec(dllimport) void* llvm_zone_malloc_from_current_zone(uint64_t);
-#else
-void* llvm_zone_malloc_from_current_zone(uint64_t);
-#endif
-
 NVGpaint* nvgLinearGradient(NVGcontext* ctx,
 								  float sx, float sy, float ex, float ey,
 								  NVGcolor *icol, NVGcolor *ocol)
@@ -956,7 +960,7 @@ NVGpaint* nvgImagePattern(NVGcontext* ctx,
 
 	p->image = image;
 
-	p->innerColor = p->outerColor = nvgRGBAf(1,1,1,alpha);
+	p->innerColor = p->outerColor = *nvgRGBAf(1,1,1,alpha);
 
 	return p;
 }
