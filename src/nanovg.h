@@ -182,35 +182,35 @@ void nvgGlobalCompositeBlendFuncSeparate(NVGcontext* ctx, int srcRGB, int dstRGB
 // Colors in NanoVG are stored as unsigned ints in ABGR format.
 
 // Returns a color value from red, green, blue values. Alpha will be set to 255 (1.0f).
-NVGcolor nvgRGB(unsigned char r, unsigned char g, unsigned char b);
+NVGcolor* nvgRGB(unsigned char r, unsigned char g, unsigned char b);
 
 // Returns a color value from red, green, blue values. Alpha will be set to 1.0f.
-NVGcolor nvgRGBf(float r, float g, float b);
+NVGcolor* nvgRGBf(float r, float g, float b);
 
 
 // Returns a color value from red, green, blue and alpha values.
-NVGcolor nvgRGBA(unsigned char r, unsigned char g, unsigned char b, unsigned char a);
+NVGcolor* nvgRGBA(unsigned char r, unsigned char g, unsigned char b, unsigned char a);
 
 // Returns a color value from red, green, blue and alpha values.
-NVGcolor nvgRGBAf(float r, float g, float b, float a);
+NVGcolor* nvgRGBAf(float r, float g, float b, float a);
 
 
 // Linearly interpolates from color c0 to c1, and returns resulting color value.
-NVGcolor nvgLerpRGBA(NVGcolor c0, NVGcolor c1, float u);
+NVGcolor* nvgLerpRGBA(NVGcolor *c0, NVGcolor *c1, float u);
 
 // Sets transparency of a color value.
-NVGcolor nvgTransRGBA(NVGcolor c0, unsigned char a);
+NVGcolor* nvgTransRGBA(NVGcolor *c0, unsigned char a);
 
 // Sets transparency of a color value.
-NVGcolor nvgTransRGBAf(NVGcolor c0, float a);
+NVGcolor* nvgTransRGBAf(NVGcolor *c0, float a);
 
 // Returns color value specified by hue, saturation and lightness.
 // HSL values are all in range [0..1], alpha will be set to 255.
-NVGcolor nvgHSL(float h, float s, float l);
+NVGcolor* nvgHSL(float h, float s, float l);
 
 // Returns color value specified by hue, saturation and lightness and alpha.
 // HSL values are all in range [0..1], alpha in range [0..255]
-NVGcolor nvgHSLA(float h, float s, float l, unsigned char a);
+NVGcolor* nvgHSLA(float h, float s, float l, unsigned char a);
 
 //
 // State Handling
